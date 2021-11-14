@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.DS_Store
+
+imagens_capturadas
+modelo_pedra_papel_tesoura.h5
