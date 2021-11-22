@@ -1,14 +1,15 @@
 import cv2
 from os import path, mkdir, walk
+from numpy import ndarray
+from typing import Union
 
 
 class CapturaImagens:
     def __init__(self,
                  nome_do_sinal: str,
                  quantidade_de_capturas: int,
-                 captura_de_video: int):
+                 captura_de_video: Union[int, str]):
         self.__nome_do_sinal = nome_do_sinal
-
         self.__quantidade_de_capturas = quantidade_de_capturas
         self.__captura_de_video = cv2.VideoCapture(captura_de_video)
 
@@ -17,9 +18,12 @@ class CapturaImagens:
             ultima_captura=0
         )
 
+        self.__frame: ndarray = None
+
     def executar(self) -> None:
         self.__monta_diretorio_de_salvamento()
         self.__captura_imagens()
+        self.__encerrar()
 
     def __captura_imagens(self) -> None:
         print("======== Iniciando captura de imagens ========")
@@ -29,20 +33,17 @@ class CapturaImagens:
 
         while True:
             _, frame = self.__captura_de_video.read()
-            frame = cv2.flip(frame, 1)
-
-            self.__monta_posicao_captura(frame)
+            self.__frame: ndarray = cv2.flip(frame, 1)
+            self.__monta_posicao_captura()
 
             if capturar:
                 numero_captura = quantidade_de_capturas + 1
-                self.__salva_captura(frame, numero_captura)
-                quantidade_de_capturas = numero_captura
-                print(f"[INFO] Captura número {numero_captura} ")
+                self.__salva_captura(numero_captura)
 
-            self.__informa_quantidade_de_capturas(
-                frame,
-                quantidade_de_capturas
-            )
+                print(f"[INFO] Captura número {numero_captura} ")
+                quantidade_de_capturas = numero_captura
+
+            self.__informa_quantidade_de_capturas(quantidade_de_capturas)
 
             tecla = cv2.waitKey(10)
             if tecla == ord(' '):
@@ -50,12 +51,11 @@ class CapturaImagens:
 
             parar_processamento = bool(
                 quantidade_de_capturas == self.__quantidade_de_capturas or
-                tecla == ord('q')
+                tecla == 27
             )
             if parar_processamento:
                 break
 
-        cv2.destroyAllWindows()
         print(
             "[INFO] Captura de imagens encerrada. "
             f"Total de {quantidade_de_capturas} imagens capturadas. "
@@ -63,22 +63,19 @@ class CapturaImagens:
             f"'{self.__dados_diretorio_salvamento['caminho']}'."
         )
 
-    def __monta_posicao_captura(self, frame) -> None:
-        posicao = (100, 200)
-        largura_e_altura = (650, 750)
+    def __monta_posicao_captura(self) -> None:
         cv2.rectangle(
-            frame,
-            posicao,
-            largura_e_altura,
+            self.__frame,
+            (1390, 410),
+            (1780, 770),
             (0, 0, 0),
             2
         )
 
     def __informa_quantidade_de_capturas(self,
-                                         frame,
                                          quantidade_de_capturas: int) -> None:
         cv2.putText(
-            frame,
+            self.__frame,
             f"Imagens capturadas: {quantidade_de_capturas}",
             (100, 190),
             cv2.FONT_HERSHEY_SIMPLEX,
@@ -87,9 +84,9 @@ class CapturaImagens:
             2,
             cv2.LINE_AA
         )
-        cv2.imshow("Captura de imagem", frame)
+        cv2.imshow("Captura de imagem", self.__frame)
 
-    def __salva_captura(self, frame, numero_captura: int) -> None:
+    def __salva_captura(self, numero_captura: int) -> None:
         nome_captura = (
             self.__dados_diretorio_salvamento['ultima_captura'] +
             numero_captura
@@ -99,7 +96,7 @@ class CapturaImagens:
                 self.__dados_diretorio_salvamento['caminho'],
                 f'{nome_captura}.jpg'
             ),
-            frame[220:750, 100:590]
+            self.__frame[420:760, 1400:1770]
         )
 
     def __monta_diretorio_de_salvamento(self) -> None:
@@ -125,3 +122,7 @@ class CapturaImagens:
             if ultimas_capturas
             else 0
         )
+
+    def __encerrar(self) -> None:
+        cv2.destroyAllWindows()
+        self.__captura_de_video.release()

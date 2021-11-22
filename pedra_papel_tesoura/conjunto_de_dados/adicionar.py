@@ -1,10 +1,22 @@
 from argparse import ArgumentParser
-from captura_images import CapturaImagens
+from captura_imagens import CapturaImagens
 
 descricao = """
-    Arquivo para obtenção de conjunto de dados para treino de classificador 
+    Script para obtenção de conjunto de dados para treino de classificador 
     de sinais do jogo Pedra, Papel ou Tesoura.
+    
+    Ações:
+     > Pressione a tecla espaço para começar/pausar.
+     > Pressione a tecla q para fechar o sistema.
 """
+
+
+def str_or_int(arg):
+    try:
+        return int(arg)
+    except ValueError:
+        return str(arg)
+
 
 parser = ArgumentParser(description=descricao)
 parser.add_argument(
@@ -26,6 +38,7 @@ parser.add_argument(
     '-cv',
     '--captura-de-video',
     help='Dispositivo/Video do qual serão capturadas as imagens.',
+    type=str_or_int,
     default=0
 )
 

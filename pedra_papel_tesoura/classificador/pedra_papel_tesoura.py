@@ -34,21 +34,20 @@ class ClassificadorPedraPapelTesoura:
         self.__modelo: Sequential = None
 
     def classificar(self, imagem: np.ndarray) -> str:
-        print(f"\n[INFO] Obtendo imagem para classificação...\n")
         self.__importar_modelo()
 
         imagem_redimensionada: np.ndarray = self.__redimensionar_imagem(imagem)
         sinal_identificado: str = self.__classificar(imagem_redimensionada)
 
         print(
-            "\n[INFO] Sinal identificado/classificado como: "
-            f"{sinal_identificado}.\n"
+            "[INFO] Sinal identificado/classificado como: "
+            f"{sinal_identificado.upper()}"
         )
 
         return sinal_identificado
 
     def testar(self, diretorio_imagem: str) -> None:
-        print(f"\n[INFO] Obtendo imagem para classificação...\n")
+        print(f"[INFO] Obtendo imagem para classificação...")
         self.__importar_modelo()
 
         imagem_redimensionada: np.ndarray = self.__redimensionar_imagem(
@@ -57,8 +56,8 @@ class ClassificadorPedraPapelTesoura:
         sinal_identificado: str = self.__classificar(imagem_redimensionada)
 
         print(
-            "\n[INFO] Sinal identificado/classificado como: "
-            f"{sinal_identificado}.\n"
+            "[INFO] Sinal identificado/classificado como: "
+            f"{sinal_identificado}."
         )
 
     def treinar(self) -> None:
@@ -68,7 +67,7 @@ class ClassificadorPedraPapelTesoura:
         self.__salvar_modelo()
 
     def __montar_modelo(self) -> None:
-        print('\n[INFO] Montando classificador...\n')
+        print('[INFO] Montando classificador...')
         modelo = Sequential([
             SqueezeNet(
                 input_shape=(227, 227, 3),
@@ -91,10 +90,10 @@ class ClassificadorPedraPapelTesoura:
         )
         self.__modelo = modelo
 
-        print('\n[INFO] Classificador montado com sucesso...\n')
+        print('[INFO] Classificador montado com sucesso...')
 
     def __carregar_capturas(self) -> None:
-        print("\n[INFO] Importando capturas...\n")
+        print("[INFO] Importando capturas...")
 
         capturas = []
         for nome_sinal in listdir(self.__diretorio_conjunto_de_dados):
@@ -120,10 +119,10 @@ class ClassificadorPedraPapelTesoura:
                 )
         self.__conjunto_de_dados: list = capturas
 
-        print("\n[INFO] Capturas importadas com sucesso.\n")
+        print("[INFO] Capturas importadas com sucesso.")
 
     def __treinar_modelo(self) -> None:
-        print("\n[INFO] Treinando classificador...\n")
+        print("[INFO] Treinando classificador...")
 
         capturas, sinais = zip(*self.__conjunto_de_dados)
         sinais = list(map(
@@ -142,11 +141,11 @@ class ClassificadorPedraPapelTesoura:
         print("[INFO] Classificador treinado com sucesso.")
 
     def __salvar_modelo(self) -> None:
-        print("\n[INFO] Salvando classificador...\n")
+        print("[INFO] Salvando classificador...")
 
         self.__modelo.save("modelo_pedra_papel_tesoura.h5")
 
-        print("\n[INFO] Classificador salvo com sucesso.\n")
+        print("[INFO] Classificador salvo com sucesso.")
 
     def __importar_modelo(self) -> None:
         if not path.exists('modelo_pedra_papel_tesoura.h5'):
@@ -154,7 +153,8 @@ class ClassificadorPedraPapelTesoura:
             print(msg_error)
             raise ClassificadorPedraPapelTesouraException(msg_error)
 
-        self.__modelo = load_model("modelo_pedra_papel_tesoura.h5")
+        if not self.__modelo:
+            self.__modelo = load_model("modelo_pedra_papel_tesoura.h5")
 
     def __classificar(self, imagem: np.ndarray) -> str:
         mapeamento_sinais_inverso = {

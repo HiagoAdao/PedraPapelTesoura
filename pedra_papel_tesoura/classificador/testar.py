@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from pedra_papel_tesoura import ClassificadorPedraPapelTesoura
 
 descricao = """
-    Arquivo para testar classificação do modelo treinado para reconhecer 
+    Script para testar classificação do modelo treinado para reconhecer 
     sinais do jogo Pedra, Papel ou Tesoura.
 """
 
