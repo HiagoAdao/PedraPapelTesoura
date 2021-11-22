@@ -1,12 +1,15 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawTextHelpFormatter
 from pedra_papel_tesoura import ClassificadorPedraPapelTesoura
 
 descricao = """
-    Script para testar classificação do modelo treinado para reconhecer 
-    sinais do jogo Pedra, Papel ou Tesoura.
+    Script para teste de classificação do modelo treinado para reconhecer 
+    sinais do jogo Pedra, Papel e Tesoura. 
 """
 
-parser = ArgumentParser(description=descricao)
+parser = ArgumentParser(
+    description=descricao,
+    formatter_class=RawTextHelpFormatter
+)
 parser.add_argument(
     '-i',
     '--imagem',

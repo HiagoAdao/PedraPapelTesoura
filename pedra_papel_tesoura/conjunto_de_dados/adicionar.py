@@ -1,13 +1,13 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawTextHelpFormatter
 from captura_imagens import CapturaImagens
 
 descricao = """
-    Script para obtenção de conjunto de dados para treino de classificador 
-    de sinais do jogo Pedra, Papel ou Tesoura.
+    Script para obtenção de conjunto de dados para treino de classificador  de 
+    sinais do jogo Pedra, Papel e Tesoura.
     
     Ações:
-     > Pressione a tecla espaço para começar/pausar.
-     > Pressione a tecla q para fechar o sistema.
+      > Pressione a tecla 'Espaço' para começar/pausar.
+      > Pressione a tecla 'Q' para fechar o sistema.
 """
 
 
@@ -18,7 +18,10 @@ def str_or_int(arg):
         return str(arg)
 
 
-parser = ArgumentParser(description=descricao)
+parser = ArgumentParser(
+    description=descricao,
+    formatter_class=RawTextHelpFormatter
+)
 parser.add_argument(
     '-ns',
     '--nome-do-sinal',

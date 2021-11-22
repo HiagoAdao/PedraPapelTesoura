@@ -1,15 +1,19 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawTextHelpFormatter
 from pedra_papel_tesoura import PedraPapelTesoura, Util
 
 descricao = """
-    Arquivo para obtenção de conjunto de dados para treino de classificador 
-    de sinais do jogo Pedra, Papel ou Tesoura.
+    Script para inicialização do jogo Pedra, Papel e Tesoura.
 
     Ações:
-     > Utilize a cor X para Y
+      > Utilize a cor 'Azul' para iniciar o jogo.
+      > Pressione a tecla 'D' para iniciar uma disputa.
+      > Utilize a cor 'Rosa' ou pressione a tecla 'Q' para encerra o jogo.
 """
 
-parser = ArgumentParser(description=descricao)
+parser = ArgumentParser(
+    description=descricao,
+    formatter_class=RawTextHelpFormatter
+)
 parser.add_argument(
     '-cv',
     '--captura-de-video',
