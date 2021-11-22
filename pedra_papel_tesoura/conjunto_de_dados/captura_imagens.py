@@ -51,7 +51,7 @@ class CapturaImagens:
 
             parar_processamento = bool(
                 quantidade_de_capturas == self.__quantidade_de_capturas or
-                tecla == 27
+                tecla == ord('q')
             )
             if parar_processamento:
                 break
