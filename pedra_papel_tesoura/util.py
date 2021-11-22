@@ -1,4 +1,5 @@
 from typing import Any, Union
+from datetime import datetime
 
 
 class Util:
@@ -8,3 +9,9 @@ class Util:
             return int(arg)
         except ValueError:
             return str(arg)
+
+    @staticmethod
+    def get_current_date(format_date: str):
+        current_date = datetime.today()
+        formated_date = current_date.strftime(format_date)
+        return formated_date

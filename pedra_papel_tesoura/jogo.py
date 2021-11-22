@@ -1,6 +1,7 @@
 import cv2
 from numpy import ndarray
 from typing import Union
+from .util import Util
 from .classificador import ClassificadorPedraPapelTesoura
 from .reconhecimento_facial import ReconhecedorFacial
 from .reconhecimento_cores import ReconhecedorCores
@@ -21,12 +22,17 @@ class PedraPapelTesoura:
             comecar=False,
             encerrar=False,
             preparar_disputa=True,
-            log=[]
+            dados_ultimo_jogo=dict(
+                resultado='??',
+                cor_texto=self.__layout_color[::-1]
+            ),
+            logs=[]
         )
 
     def jogar(self) -> None:
         self.__inicializar_regras()
         self.__iniciar()
+        self.__salva_log()
         self.__encerrar()
 
     def __inicializar_regras(self) -> None:
@@ -69,6 +75,10 @@ class PedraPapelTesoura:
                 )
 
                 if cv2.waitKey(10) == ord('d'):
+                    self.__dados_jogo['dados_ultimo_jogo'] = dict(
+                        resultado='??',
+                        cor_texto=self.__layout_color[::-1]
+                    )
                     self.__dados_jogo['preparar_disputa'] = (
                         not self.__dados_jogo['preparar_disputa']
                     )
@@ -224,7 +234,7 @@ class PedraPapelTesoura:
             self.__apresentar_resultado_indefinido()
             return
 
-        cor_texto = (238, 173, 45)
+        cor_texto = (0, 140, 255)
         resultado_jogo = 'Empate!!'
         if resultado == sinal_jogador1:
             resultado_jogo = 'Jogador 1 venceu!!'
@@ -233,8 +243,6 @@ class PedraPapelTesoura:
             resultado_jogo = 'Jogador 2 venceu!!'
             cor_texto = (0, 255, 0)
 
-        # TODO: Colocar lógica para desenho na tela do resultado do jogo
-        print(resultado_jogo)
         cv2.putText(
             self.__frame,
             resultado_jogo,
@@ -246,20 +254,39 @@ class PedraPapelTesoura:
             cv2.LINE_AA
         )
 
+        self.__dados_jogo['preparar_disputa'] = True
+        self.__dados_jogo['dados_ultimo_jogo'] = dict(
+            resultado=resultado_jogo,
+            cor_texto=cor_texto
+        )
+
+        msg_log = (
+            f'Jogo feito em: {Util.get_current_date("%d/%m/%Y %H:%M:%S")} '
+            f'Movimento Jogador1: {sinal_jogador1.upper()}. '
+            f'Movimento Jogador2: {sinal_jogador2.upper()}. '
+            f'Vencedor: {resultado_jogo.upper()}.'
+        )
+        self.__dados_jogo['logs'].append(msg_log)
+
     def __apresentar_resultado_indefinido(self):
         cv2.putText(
             self.__frame,
-            '??',
+            self.__dados_jogo['dados_ultimo_jogo']['resultado'],
             (970, 190),
             cv2.FONT_HERSHEY_DUPLEX,
             1.2,
-            self.__layout_color[::-1],
+            self.__dados_jogo['dados_ultimo_jogo']['cor_texto'],
             2,
             cv2.LINE_AA
         )
 
     def __salva_log(self):
-        pass
+        if not self.__dados_jogo['logs']:
+            return
+
+        with open('logs_partidas.txt', 'w') as arquivo:
+            for log in self.__dados_jogo['logs']:
+                arquivo.write(f'{log}\n')
 
     def __encerrar(self) -> None:
         cv2.destroyAllWindows()
