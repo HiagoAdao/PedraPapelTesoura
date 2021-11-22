@@ -1,7 +1,7 @@
 import cv2
 from numpy import ndarray
 from typing import Union
-from .util import Util
+from .util import Util, Timer
 from .classificador import ClassificadorPedraPapelTesoura
 from .reconhecimento_facial import ReconhecedorFacial
 from .reconhecimento_cores import ReconhecedorCores
@@ -12,6 +12,7 @@ class PedraPapelTesoura:
         self.__captura_de_video = cv2.VideoCapture(captura_de_video)
         self.__classificador = ClassificadorPedraPapelTesoura()
         self.__reconhecedor_cores = ReconhecedorCores()
+        self.__timer = Timer()
 
         self.__frame: ndarray = None
         self.__regras = {}
@@ -32,7 +33,7 @@ class PedraPapelTesoura:
     def jogar(self) -> None:
         self.__inicializar_regras()
         self.__iniciar()
-        self.__salva_log()
+        self.__salvar_log()
         self.__encerrar()
 
     def __inicializar_regras(self) -> None:
@@ -42,13 +43,6 @@ class PedraPapelTesoura:
             ('papel', 'tesoura'): 'tesoura'
         }
         self.__regras = regras
-
-    def __obter_resultado_disputa(self, disputa: set) -> str:
-        movimento = next(filter(
-            lambda regra: set(regra) == disputa,
-            self.__regras
-        ), None)
-        return self.__regras.get(movimento)
 
     def __iniciar(self) -> None:
         while True:
@@ -75,13 +69,7 @@ class PedraPapelTesoura:
                 )
 
                 if cv2.waitKey(10) == ord('d'):
-                    self.__dados_jogo['dados_ultimo_jogo'] = dict(
-                        resultado='??',
-                        cor_texto=self.__layout_color[::-1]
-                    )
-                    self.__dados_jogo['preparar_disputa'] = (
-                        not self.__dados_jogo['preparar_disputa']
-                    )
+                    self.__reinicia_disputa()
 
                 self.__organizar_layout()
 
@@ -104,8 +92,20 @@ class PedraPapelTesoura:
                         sinal_identificado_jogador2,
                         resultado
                     )
+
+                    is_jogada_valida: bool = (
+                        "desconhecido" not in
+                        [sinal_identificado_jogador1,
+                         sinal_identificado_jogador2]
+                    )
+                    if is_jogada_valida and not self.__timer.is_running:
+                        self.__timer.start(3)
                 else:
                     self.__apresentar_resultado_indefinido()
+
+                self.__timer.execute_function_when_end(
+                    self.__reinicia_disputa
+                )
 
             cv2.imshow("Pedra, Papel e Tesoura", self.__frame)
 
@@ -254,7 +254,6 @@ class PedraPapelTesoura:
             cv2.LINE_AA
         )
 
-        self.__dados_jogo['preparar_disputa'] = True
         self.__dados_jogo['dados_ultimo_jogo'] = dict(
             resultado=resultado_jogo,
             cor_texto=cor_texto
@@ -280,7 +279,23 @@ class PedraPapelTesoura:
             cv2.LINE_AA
         )
 
-    def __salva_log(self):
+    def __obter_resultado_disputa(self, disputa: set) -> str:
+        movimento = next(filter(
+            lambda regra: set(regra) == disputa,
+            self.__regras
+        ), None)
+        return self.__regras.get(movimento)
+
+    def __reinicia_disputa(self):
+        self.__dados_jogo['dados_ultimo_jogo'] = dict(
+            resultado='??',
+            cor_texto=self.__layout_color[::-1]
+        )
+        self.__dados_jogo['preparar_disputa'] = (
+            not self.__dados_jogo['preparar_disputa']
+        )
+
+    def __salvar_log(self):
         if not self.__dados_jogo['logs']:
             return
 
