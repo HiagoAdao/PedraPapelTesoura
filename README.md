@@ -51,7 +51,10 @@ python3 pedra_papel_tesoura/classificador/testar.py -i {path da imagem a ser tes
 
 Pronto! Agora estamos prontos para jogar!
 
-**Obs: Todos os detalhes dos comandos podem ser encontrados executando o arquivo com o parâmetro -h ou --help**
+**Obs: Todos os detalhes dos comandos podem ser encontrados executando o arquivo com o parâmetro -h ou --help. Exemplo:**
+```sh
+python3 pedra_papel_tesoura/conjunto_de_dados/adicionar.py -h
+```
 
 ## Execução
 
