@@ -68,11 +68,6 @@ Funcionalidades:
   - ✊ -> Pedra
   - 🖐 -> Papel
   - ✌️ -> Tesoura
- 
-- São reconhecidas duas cores, uma inicia o jogo e outra encerra.
-  - Cor Azul -> Inicia o jogo
-  - Cor Rosa -> Encerra o jogo
-  - Cor Azul + Rosa -> Encerra o sistema
 
 - São reconhecidas duas cores, uma inicia o jogo e outra encerra.
   - Cor Azul -> Inicia o jogo
