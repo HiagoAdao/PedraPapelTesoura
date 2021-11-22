@@ -1,11 +1,11 @@
 # ✊✋✌️
-## Pedra, papel e tesoura, com visão computacional.
-Este projeto consiste em um jogo de pedra, papel e tesoura.  <br />
+## Pedra, papel, e tesoura, com visão computacional.
+Este projeto consiste em um jogo de pedra, papel, e tesoura.  <br />
 
 Funcionalidades: <br />
 * São reconhecidas as faces dos alunos responsáveis pela implementação do jogo.
 
-* São reconhecidos os gestos do tradicional jogo pedra, papel e tesoura. Sendo: <br /> 
+* São reconhecidos os gestos do tradicional jogo de pedra, papel, e tesoura. Sendo: <br /> 
   ✊ -> Pedra  <br />
   🖐 -> Papel  <br />
   ✌️ -> Tesoura  <br />
