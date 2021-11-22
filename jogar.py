@@ -1,5 +1,5 @@
 from argparse import ArgumentParser, RawTextHelpFormatter
-from pedra_papel_tesoura import PedraPapelTesoura, Util
+from pedra_papel_tesoura import PedraPapelTesoura
 
 descricao = """
     Script para inicialização do jogo Pedra, Papel e Tesoura.
@@ -17,8 +17,8 @@ parser = ArgumentParser(
 parser.add_argument(
     '-cv',
     '--captura-de-video',
-    help='Dispositivo/Video do qual serão capturadas as imagens.',
-    type=Util.str_or_int,
+    help='Dispositivo do qual serão capturadas as imagens.',
+    type=int,
     default=0
 )
 

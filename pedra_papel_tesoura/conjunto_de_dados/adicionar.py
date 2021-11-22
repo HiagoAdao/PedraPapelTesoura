@@ -10,14 +10,6 @@ descricao = """
       > Pressione a tecla 'Q' para fechar o sistema.
 """
 
-
-def str_or_int(arg):
-    try:
-        return int(arg)
-    except ValueError:
-        return str(arg)
-
-
 parser = ArgumentParser(
     description=descricao,
     formatter_class=RawTextHelpFormatter
@@ -40,8 +32,8 @@ parser.add_argument(
 parser.add_argument(
     '-cv',
     '--captura-de-video',
-    help='Dispositivo/Video do qual serão capturadas as imagens.',
-    type=str_or_int,
+    help='Dispositivo do qual serão capturadas as imagens.',
+    type=int,
     default=0
 )
 
