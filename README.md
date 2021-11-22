@@ -16,7 +16,7 @@ Funcionalidades: <br />
  
  ## Bibliotecas de visão computacional utilizadas:
  [Open CV](https://opencv.org/) <br />
- [Face reconition](https://github.com/ageitgey/face_recognition) <br />
+ [Face recognition](https://github.com/ageitgey/face_recognition) <br />
  [Tensor flow](https://www.tensorflow.org/?hl=pt-br) <br />
  
                                                                             
