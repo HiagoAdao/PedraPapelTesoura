@@ -22,16 +22,18 @@ class ReconhecedorCores:
             hsv_frame,
             self.__color1
         )
-        if has_color1_in_frame:
-            return 'Color1'
 
         has_color2_in_frame = self.__identify_color(
             frame,
             hsv_frame,
             self.__color2
         )
-        if has_color2_in_frame:
+        if has_color1_in_frame and has_color2_in_frame:
+            return 'Color1', 'Color2'
+        elif has_color2_in_frame:
             return 'Color2'
+        elif has_color1_in_frame:
+            return 'Color1'
 
     def __identify_color(self,
                          frame: np.ndarray,

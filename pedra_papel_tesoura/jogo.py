@@ -219,12 +219,15 @@ class PedraPapelTesoura:
 
     def __detectar_cor(self):
         cor = self.__reconhecedor_cores.identificar(self.__frame)
-        if cor == 'Color1':
+        if cor == ('Color1', 'Color2'):
+            self.__dados_jogo['comecar'] = False
+            self.__dados_jogo['encerrar'] = True
+        elif cor == 'Color1':
             self.__dados_jogo['comecar'] = True
             self.__dados_jogo['encerrar'] = False
         elif cor == 'Color2':
-            self.__dados_jogo['encerrar'] = True
             self.__dados_jogo['comecar'] = False
+            self.__dados_jogo['encerrar'] = False
 
     def __apresentar_ganhador(self,
                               sinal_jogador1: str,
@@ -260,10 +263,10 @@ class PedraPapelTesoura:
         )
 
         msg_log = (
-            f'Jogo feito em: {Util.get_current_date("%d/%m/%Y %H:%M:%S")} '
+            f'Jogo feito em: {Util.get_current_date("%d/%m/%Y %H:%M:%S")}. '
             f'Movimento Jogador1: {sinal_jogador1.upper()}. '
             f'Movimento Jogador2: {sinal_jogador2.upper()}. '
-            f'Vencedor: {resultado_jogo.upper()}.'
+            f'Resultado da partida: {resultado_jogo.upper()}.'
         )
         self.__dados_jogo['logs'].append(msg_log)
 
